@@ -4,73 +4,73 @@
 ### Insertion Sort의 개념
 
 
-1. 제자리 정렬 알고리즘이다. 입력 배열만을 이용하고 추가 메모리를 사용하지 않는다는 의미이다.
-2. Swap할 index는 이미 알고있는 상태에서 원하는 값을 선택한 후에 swap한다.
+1. 변수 하나를 이용하여 정렬을 실시한다.
+2. 배열의 모든 요소를 선택된 배열왼쪽의 값부터 역순으로 차례대로 비교하여, 값이 들어갈 위치를 찾아 삽입하여 정렬하는 알고리즘이다. 여기서 제일 중요한 개념은 선택된 값의 왼쪽은 정렬된 상태인 것이다.
 
 
 ### Insertion Sort의 과정
 
 
 1. 아래 예시에서 list에 정렬전 배열 입력값을 받는다.
-2. 아래 예시는 오름차순이기 때문에 인덱스 0인 list 값이 제일 작은 숫자가 되어야한다. 그렇기 위해서 list[0]부터 기준으로 잡고 나머지 list[index]를 비교해나갈 것이다.
-3. 2번의 과정을 통해 list[0]보다 작은 값이 있다면 그 index를 least변수에 저장해두도록 한다.  list[0]을 기준으로 한바퀴 돌고나면 list[0]보다 최솟값이 있다면 least값은 i가 아닌 상태가 된다. 그때 list[0]과 list[least]값을 swap 한다.
-    어차피 루트노드는 자식을 가지고 있지 않기때문에 연산을 할 필요가 없기 때문에 그대로 메서드를 종료시킨다.
+2. temp는 swap을 위한 변수이고 안쪽 for문에서 사용되는 j는 바깥포문에서도 사용될 것이기때문에 바깥쪽에 선언되었다.
+3. i는 1부터시작하며 안쪽 for문에서 i-1과 비교하는것부터 시작하며 index는 0으로 향할때까지 반복된다. list[j]가 temp에 저장된 값 보다 크면 오른쪽으로 한칸씩 이동시킨다. 그렇지 않으면  for문을 멈춘다.
+4. j-- 된 상태이기때문에 list[j+1]에 temp를  넣어준다. 이 상태는 정렬된 상태이다.
 4. 위의 과정을 반복한다.
 
 
 ### Insertion Sort의 특징
 
 
-1. 자료 이동 횟수를 미리 결정한다.
-2. 안정성이 없는 정렬이다. 이것은 같은 값이여도 상대적인 위치가 다를 수 있음을 의미한다.
-3. Best일때 n^2, Worst일때도 n^2의 시간복잡도를 가진다.
+1. 레코드 수가 적을수록 알고리즘 자체가 간단하기때문에 유리할 수 있다.
+2. Best일때 n, Worst일때 n^2의 시간복잡도를 가진다. 정렬인 상태일때 비교만 이루어지기 때문이다.
+3. 레코드들이 대부분 정렬되어있을때 효율적인 알고리즘일 수 있다.
 
 
-### Insertion Sort의 과정
-
-아래 그림은 선택정렬의 과정을 나타낸다. list[index] index가 0일때부터 순차적으로 비교해서 최솟값을 찾아 바꾸는 과정이다.
-
-![](https://mblogthumb-phinf.pstatic.net/20140128_73/justant_1390835759169oepXz_PNG/1.png?type=w2)
+### 그림으로 표현한 Insertion Sort
 
 
-다음 아래 코드는 필자가 Java를 이용하여 선택정렬을 구현한 것이다. 
+아래 그림은 삽입정렬의 과정을 나타낸다. 선택된 배열값 왼쪽의 값들이 이미 정렬되어있는 상태라고 생각하고 보면 이해가 잘 될것이다.
+
+![](https://mblogthumb-phinf.pstatic.net/20140128_138/justant_1390838207680eBQJX_PNG/1.png?type=w2)
+
+그림참고 : https://m.blog.naver.com/PostView.nhn?blogId=justant&logNo=20204025251&proxyReferer=https%3A%2F%2Fwww.google.com%2F
+
+
+다음 아래 코드는 필자가 Java를 이용하여 삽입정렬을 구현한 것이다. 
 
 
 ```java
 
-public class MySelectionSort {
+public class MyInsertionSort {
 
-    public MySelectionSort() {
-        selection_sort();
+    public MyInsertionSort() {
+        insertion_sort();
     }
     
-    public void selection_sort() {
+    public void insertion_sort() {
         
-        int[] list = {1,2,3,0,10,3,4,5};
+        int[] list = {1,4,3,2,5,5,9,10};
+        int length = list.length;
+        int temp = 0;
+        int j;
         
-        int n = list.length;
-        int least;
-        int temp;
-        
-        for(int i=0; i<n-1 ; i++) {
-            least = i;
-            for(int j=i+1; j<n ; j++) {
-                if(list[i] > list[j]) {
-                    least = j;
-                }
+        for(int i=1 ; i<length ; i++) {
+            temp = list[i];
+            
+            //앞에부분은 정렬이 되어있다는 것을 보장함
+            for(j=i-1 ; j>=0 && list[j]>temp ; j-- ) {
+                list[j+1] = list[j];
             }
-            if(least != i) {
-                temp = list[least];
-                list[least] = list[i];
-                list[i] = temp;
-            }
+            
+            list[j+1] = temp;
         }
         
-        for(int item : list) {
-            System.out.println(item + " ");
+        for(int i : list) {
+            System.out.println(i+ " ");
         }
     }
 }
+
 
 ```
 

@@ -26,12 +26,13 @@
 3. Best일때 n^2, Worst일때도 n^2의 시간복잡도를 가진다.
 
 
-### Selection Sort의 과정
+### 그림으로 표현한 Selection Sort
 
 아래 그림은 선택정렬의 과정을 나타낸다. list[index] index가 0일때부터 순차적으로 비교해서 최솟값을 찾아 바꾸는 과정이다.
 
 ![](https://mblogthumb-phinf.pstatic.net/20140128_73/justant_1390835759169oepXz_PNG/1.png?type=w2)
 
+그림참고 : https://m.blog.naver.com/PostView.nhn?blogId=justant&logNo=20203018572&proxyReferer=https%3A%2F%2Fwww.google.com%2F
 
 다음 아래 코드는 필자가 Java를 이용하여 선택정렬을 구현한 것이다. 
 
