@@ -4,73 +4,82 @@
 ### Bubble Sort의 개념
 
 
-1. 제자리 정렬 알고리즘이다. 입력 배열만을 이용하고 추가 메모리를 사용하지 않는다는 의미이다.
-2. Swap할 index는 이미 알고있는 상태에서 원하는 값을 선택한 후에 swap한다.
+1. 선택 정렬과 매우 유사한 알고리즘으로 직관적으로 받아들이기 쉬운 알고리즘이다.
+2. 서로 인접한 두 원소끼리 비교하여 정렬하는 알고리즘이다.
 
 
 ### Bubble Sort의 과정
 
 
 1. 아래 예시에서 list에 정렬전 배열 입력값을 받는다.
-2. 아래 예시는 오름차순이기 때문에 인덱스 0인 list 값이 제일 작은 숫자가 되어야한다. 그렇기 위해서 list[0]부터 기준으로 잡고 나머지 list[index]를 비교해나갈 것이다.
-3. 2번의 과정을 통해 list[0]보다 작은 값이 있다면 그 index를 least변수에 저장해두도록 한다.  list[0]을 기준으로 한바퀴 돌고나면 list[0]보다 최솟값이 있다면 least값은 i가 아닌 상태가 된다. 그때 list[0]과 list[least]값을 swap 한다.
-    어차피 루트노드는 자식을 가지고 있지 않기때문에 연산을 할 필요가 없기 때문에 그대로 메서드를 종료시킨다.
+2. 이중 for문을 이용하여 안쪽 포문에서 j의 배열값과 j+1의 배열값을 비교한후에 큰 것을 오른쪽에 위치시키기 위해 swap을 한다.
+3. 한 번 과정이 마무리되면 마지막 값은 제일 큰 값이 와있기때문에 다음과정에서는 1번 덜 시행하면 된다. 그러기 때문에 안쪽 for문에 i가 커질때마다 i의 값에 따라 덜 돌아야 하기때문에 j < len-i-1로 설정하였다.
 4. 위의 과정을 반복한다.
 
 
 ### Bubble Sort의 특징
 
 
-1. 자료 이동 횟수를 미리 결정한다.
-2. 안정성이 없는 정렬이다. 이것은 같은 값이여도 상대적인 위치가 다를 수 있음을 의미한다.
-3. Best일때 n^2, Worst일때도 n^2의 시간복잡도를 가진다.
+1. 구현이 매우 간단하다. 삽입정렬, 선택정렬과 비교해보면 코드가 더 짧다.
+2. 모든 원소들을 비교하고 교환시킨다.
+3. 최종 위치에 정렬된 원소라고해도 교환이 되는 일이 발생한다.
+4. 선택정렬과 마찬가지로 Best일때 n^2, Worst일때도 n^2의 시간복잡도를 가진다.
+5. 일반적으로 알고있는 정렬 알고리즘 중에 제일 많은 Run-time시간이 걸린다.
 
 
-### Bubble Sort의 과정
 
-아래 그림은 선택정렬의 과정을 나타낸다. list[index] index가 0일때부터 순차적으로 비교해서 최솟값을 찾아 바꾸는 과정이다.
+### 그림으로 표현한 Bubble Sort
 
-![](https://mblogthumb-phinf.pstatic.net/20140128_73/justant_1390835759169oepXz_PNG/1.png?type=w2)
+아래 그림은 버블정렬의 과정을 나타낸다. 직관적으로 이해하기 매우 쉬운 알고리즘이다.
+
+![](http://postfiles11.naver.net/20140128_282/justant_1390842794487v9kxH_PNG/%B9%F6%BA%ED%C1%A4%B7%C4.png?type=w2)
+
+그림참고 : http://blog.naver.com/PostView.nhn?blogId=justant&logNo=20204028286&parentCategoryNo=&categoryNo=16&viewDate=&isShowPopularPosts=true&from=search
 
 
-다음 아래 코드는 필자가 Java를 이용하여 선택정렬을 구현한 것이다. 
+다음 아래 코드는 필자가 Java를 이용하여 버블정렬을 구현한 것이다. 
 
 
 ```java
 
-public class MySelectionSort {
 
-    public MySelectionSort() {
-        selection_sort();
+public class MyBubbleSort {
+
+    public MyBubbleSort() {
+        bubble_sort();
     }
     
-    public void selection_sort() {
+    public void bubble_sort() {
         
-        int[] list = {1,2,3,0,10,3,4,5};
-        
-        int n = list.length;
-        int least;
+        int[] list = {1,3,2,6,3,4,-1,4,2,2,-99};
         int temp;
+        int len = list.length;
         
-        for(int i=0; i<n-1 ; i++) {
-            least = i;
-            for(int j=i+1; j<n ; j++) {
-                if(list[i] > list[j]) {
-                    least = j;
+        for(int i=0; i<len-1 ; i++) {
+        
+            temp = 0;
+            
+            for(int j=0 ; j< len-i-1 ; j++) {
+            
+                if(list[j] > list[j+1]) {
+                
+                    temp = list[j];
+                    list[j] = list[j+1];
+                    list[j+1] = temp;
+                    
                 }
-            }
-            if(least != i) {
-                temp = list[least];
-                list[least] = list[i];
-                list[i] = temp;
             }
         }
         
         for(int item : list) {
-            System.out.println(item + " ");
+        
+            System.out.print(item + " ");
+            
         }
     }
 }
 
+
 ```
 
+삽입정렬, 선택정렬도 쉬운 편에 속하지만 버블정렬이 조금 더 쉬운 느낌이 든다. 코드도 짧고 매우 직관적인 알고리즘이다.
