@@ -53,7 +53,7 @@ public class MyQuickSort {
         do {
             
             // 왼쪽부터 pivot보다 큰값을 찾는 과정 : low -->
-            while(low<=right && list[low]<list[left]) {
+            while(low<=right && list[low]<=list[left]) {
                 low++;
             }
             
