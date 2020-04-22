@@ -13,85 +13,89 @@ class Solution {
 	public static void main(String[] args) throws IOException {
 		
 		Solution s = new Solution();
-		String[] arr = {"12:00,12:14,HELLO,CDEFGAB","13:00,13:05,WORLD,ABCDEF"};
+		String[] arr = {"12:00,12:14,HELLO,C#DE#FGAB","13:00,13:07,WORLD,ABCDE#FG"};
 		String[] arr1 = {"12:00,12:14,HELLO,C#DEFGAB", "13:00,13:05,WORLD,ABCDEF"};
 		String[] arr2 = {"03:00,03:30,FOO,CC#B","04:00,04:08,BAR,CC#BCC#BCC#B"};
-		System.out.println(s.solution("CC#BCC#BCC#BCC#B",arr2));
+		System.out.println(s.solution("ABC",arr));
 	}
 	
-	int priority = -1;
-	int maxDiffTime = Integer.MAX_VALUE;
-	String retTitle = "";
-	
 	public String solution(String m, String[] musicinfos) {  
-		String answer = "";
 		StringTokenizer st;
-		int mlth = m.length();
 		ArrayList<String> myMelody = getMelody(m);
+		ArrayList<String> ret = new ArrayList<>();
+		int mylth = myMelody.size();
 		
 		for(int i=0; i<musicinfos.length; i++) {
 			st = new StringTokenizer(musicinfos[i], ",");
 			
 			String start = st.nextToken();
 			String end = st.nextToken();
-			String title = st.nextToken();
-			String melody = st.nextToken();
-			String temp = melody;
-			
-			int melth = melody.length();
-			int difftime = getMins(start, end);
+			String temp = st.nextToken();
+			String melody = "";
 
-			ArrayList<String> compareMelody = getMelody(melody);
-			
-			if(mlth <= melth) {
-				for(int j=0; j<melth-mlth; j++) {
-					String t = melody.substring(j, melth);
-					if(t.startsWith(m)) return title;
-				}
-			}
+			int difftime = getMin(start, end);
+			if(difftime > 1439) difftime = 1439;
 
-			//멜로디 재생시간 길이 까지 맞춰 늘리기
-			int index = 0;
-			int init = compareMelody.size();
-			for(int j=init; j<init+myMelody.size()-1; j++) {
-				melody += compareMelody.get((index++)%init);
+			ArrayList<String> compareMelody = getMelody(temp);
+			
+			if(difftime < compareMelody.size()) {
+				for(int j=0; j<difftime; j++) melody += compareMelody.get(j);
+			} else {
+				melody = temp;
 			}
 
 			compareMelody = getMelody(melody);
 			
-			for(int j=0; j<compareMelody.size(); j++) {
-				System.out.print(compareMelody.get(j)+" ");
+			//멜로디 재생시간 길이 까지 맞춰 늘리기
+			int index = 0;
+			int init = compareMelody.size();
+			
+			for(int j=init; j<difftime; j++) {
+				melody += compareMelody.get((index++)%init);
 			}
-			System.out.println();
 			
+			compareMelody = getMelody(melody);	
 			
+			//for(int j=0; j<compareMelody.size(); j++) System.out.print(compareMelody.get(j)+" ");
+			//System.out.println();
+			
+			for(int j=0 ;j<=compareMelody.size()-mylth; j++) {
+				String t = "";
+				for(int l=0; l<mylth; l++) {
+					t += compareMelody.get(j+l);
+				}
+				//System.out.println(t +" : "+m);
+				if(t.equals(m)) {
+					ret.add(musicinfos[i]);
+					break;
+				}
+			}
 			
 		}
-	    
-	    if(maxDiffTime == Integer.MAX_VALUE) answer = "'(None)'";
-	    else answer = retTitle;
-		return answer;
+
+		Collections.sort(ret, new Comparator<String>() {
+			@Override
+			public int compare(String o1, String o2) {
+				String arr[] = o1.split(",");
+				int len1 = getMin(arr[0], arr[1]);
+				arr = o2.split(",");
+				int len2 = getMin(arr[0], arr[1]);
+				return len2-len1;
+			}
+		});
+		//System.out.println(ret.size());
+		return ret.size() > 0 ? ret.get(0).split(",")[2] : "(none)";
 	}
 	
-	public int getMins(String start, String end) {
-		StringTokenizer st;
-		
-		st = new StringTokenizer(start, ":");
-		int startHour = Integer.valueOf(st.nextToken());
-		int startMin = Integer.valueOf(st.nextToken());
-		
-		st = new StringTokenizer(end, ":");
-		int endHour = Integer.valueOf(st.nextToken());
-		int endMin = Integer.valueOf(st.nextToken());
-
-		int dif = endHour - startHour;
-		int ret = dif*60;
-		if(startMin <= endMin) {
-			ret += endMin - startMin;
-		} else {
-			ret += (60+endMin - startMin) - 60;
-		}
-		return ret;
+	public static int getMin(String startTime, String endTime) {
+	    String[] arr;
+	    arr = startTime.split(":");
+	    int startMin = Integer.parseInt(arr[0]) * 60 + Integer.parseInt(arr[1]);
+	    
+	    arr = endTime.split(":");
+	    int endMin = Integer.parseInt(arr[0]) * 60 + Integer.parseInt(arr[1]);
+	    
+	    return Math.abs(endMin-startMin);
 	}
 	
 	public ArrayList<String> getMelody(String m) {
