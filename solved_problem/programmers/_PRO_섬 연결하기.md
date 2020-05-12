@@ -4,42 +4,84 @@
 ```java
 
 
-import java.io.BufferedReader;
+import java.util.*;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-public class Main {	
-
-	public static void main(String[] args) throws NumberFormatException, IOException {
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+public class Solution {
 	
-		int[] arr = {1,1,1,1,1};
-		System.out.println(solution(arr, 3));
+	 public static void main(String[] args) throws IOException {
+	    	
+	    Solution s = new Solution();
+
+	    int[][] costs = {{0,1,1},{0,2,2},{1,2,5},{1,3,1},{2,3,8}};
+	    System.out.println(s.solution(4, costs));
+	    
+	 }
+	
+	 public int solution(int n, int[][] costs) {
+		 int answer = 0;
+	     List<Edge> list = new ArrayList<Edge>();
+	     for(int i=0; i<costs.length; i++) {
+	    	 int[] cost = costs[i];
+	    	 list.add(new Edge(cost[0], cost[1], cost[2]));
+	     }
+	     Collections.sort(list);
+	     
+	     //사이클 테이블 만들기
+	     int[] parent = new int[n];
+	     for(int i=0; i<parent.length; i++) parent[i] = i;
+	     
+	     for(int i=0; i<list.size(); i++) {
+	    	 Edge edge = list.get(i);
+	    	 if(!findParent(parent, edge.node[0], edge.node[1])) {
+	    		 answer += edge.dis;
+	    		 unionParent(parent, edge.node[0], edge.node[1]);
+	    	 }
+	     }
+	     
+		 return answer;
+	 }
+	 
+	 //부모 노드를 찾는 함수
+	 static int getParent(int[] parent, int x) {
+		 if(parent[x] == x) return x;
+		 return parent[x] = getParent(parent, parent[x]);
+	 }
+	 
+	 //두 부모 노드를 합치는 함수
+	 static void unionParent(int[] parent, int a, int b) {
+		 a = getParent(parent, a);
+		 b = getParent(parent, b);
+		 if(a>b) parent[a] = b;
+		 else parent[b] = a;
+	 }
+	 
+	 //같은 부모를 가지는지 확인하는 함수
+	 static boolean findParent(int[] parent, int a, int b) {
+		 a = getParent(parent, a);
+		 b = getParent(parent, b);
+		 if(a==b) return true;
+		 return false;
+	 }
+}
+
+class Edge implements Comparable<Edge>{
+	int[] node;
+	int dis;
+	Edge(int a, int b, int dis) {
+		node = new int[2];
+		this.node[0] = a;
+		this.node[1] = b;
+		this.dis = dis;
 	}
-	
-	static int count = 0;
-	
-	static int solution(int[] numbers, int target) {
-		
-        int answer = 0;
-        
-        solve(numbers, target, 0, 0);
-
-        answer = count;
-        
-        return answer;
-    }
-	
-	static void solve(int[] numbers, int target, int start, int sum) {
-		
-		if(start==numbers.length) {
-			if(sum==target) count++;
-			return;
-		} 
-		
-		solve(numbers, target, start+1, sum+numbers[start]);
-		solve(numbers, target, start+1, sum-numbers[start]);
+	@Override
+	public int compareTo(Edge o) {
+		return this.dis - o.dis;
 	}
 }
 

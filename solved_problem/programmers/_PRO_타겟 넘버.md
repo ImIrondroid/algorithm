@@ -1,4 +1,7 @@
-# PRO_dfs1
+# PRO_타겟 넘버
+
+
+//DFS
 
 
 ```java
@@ -21,23 +24,15 @@ public class Main {
 	static int count = 0;
 	
 	static int solution(int[] numbers, int target) {
-		
-        int answer = 0;
-        
-        solve(numbers, target, 0, 0);
-
-        answer = count;
-        
-        return answer;
+      	solve(numbers, target, 0, 0);
+        return count;
     }
 	
 	static void solve(int[] numbers, int target, int start, int sum) {
-		
 		if(start==numbers.length) {
 			if(sum==target) count++;
 			return;
 		} 
-		
 		solve(numbers, target, start+1, sum+numbers[start]);
 		solve(numbers, target, start+1, sum-numbers[start]);
 	}
