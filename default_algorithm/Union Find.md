@@ -13,8 +13,8 @@
 ##### Union-Find의 연산은 아래 3가지로 나누어진다.
 
 1) Make-Set(x) : x를 유일한 원소로 하는 새로운 집합을 만든다.
-2) Union(x, y) : x가 속한 집합과 y가 속한 집합을 합친다. 즉, x와 y가 속한 두 집합을 합치는 연산
-3) Find(x) : x가 속한 집합의 대표값(루트 노드 값)을 반환한다. 즉, x가 어떤 집합에 속해 있는지 찾는 연산
+2) Union(x, y) : x가 속한 집합과 y가 속한 집합을 합친다. (즉, x와 y가 속한 두 집합을 합치는 연산)
+3) Find(x) : x가 속한 집합의 대표값(루트 노드 값)을 반환한다. (즉, x가 어떤 집합에 속해 있는지 찾는 연산)
 
 
 ### 구현
@@ -31,11 +31,11 @@ public class UnionFind {
 		//우선 기본적으로 자기자신을 부모로 가리키게 만든다. Cycle Table을 만드는 과정
 		for(int i=1; i<=10; i++) parent[i] = i;
 		
-		//첫 번째 그래프 집함
+		//첫 번째 그래프 집합
 		unionParent(parent, 1, 2);
 		unionParent(parent, 2, 3);
 		unionParent(parent, 3, 4);
-		//두 번째 그래프 집함
+		//두 번째 그래프 집합
 		unionParent(parent, 5, 6);
 		unionParent(parent, 7, 6);
 		unionParent(parent, 7, 8); 
