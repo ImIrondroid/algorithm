@@ -43,7 +43,7 @@ public class Kruskal {
 		//간선의 비용을 기준으로 오름차순 정렬
 		Collections.sort(list);
 		
-		//각 정점이 포함된 그래프가 어디인지 저장
+		//각 정점이 포함된 그래프가 어디인지 저장, 초기에는 자기 자신을 가리킴
 		int[] parent = new int[11];
 		for(int i=1; i<=10; i++) parent[i] = i;
 		
@@ -57,6 +57,7 @@ public class Kruskal {
 			}
 		}
 		
+		//최소 비용 출력
 		System.out.println(sum);
 	}
 
@@ -93,7 +94,6 @@ class Edge implements Comparable<Edge>{
 		this.node[1] = b;
 		this.dis = dis;
 	}
-	
 	@Override
 	public int compareTo(Edge o) {
 		return this.dis-o.dis;
