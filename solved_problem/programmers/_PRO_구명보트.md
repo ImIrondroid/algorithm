@@ -1,9 +1,6 @@
 # PRO_구명보트
 
 
-//그리디
-
-
 ```java
 
 
@@ -20,7 +17,7 @@ class Solution {
 
     public int solution(int[] people, int limit) {
     	
-    	boolean[] visit = new boolean[people.length];
+        boolean[] visit = new boolean[people.length];
         int answer = 0;
         int index = 0;
         int end = 0;
