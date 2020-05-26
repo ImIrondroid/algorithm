@@ -37,48 +37,63 @@
 ```java
 
 
-public class UnionFind {
+import java.util.*;
 
+public class TopologySort {
+	
+	static int n = 7;
+	static int[] inDegree = new int[8];
+	static List<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>(8);
+	
 	public static void main(String[] args) {
-
-		int[] parent = new int[11];
-		//우선 기본적으로 자기자신을 부모로 가리키게 만든다. Cycle Table을 만드는 과정
-		for(int i=1; i<=10; i++) parent[i] = i;
-		
-		//첫 번째 그래프 집합
-		unionParent(parent, 1, 2);
-		unionParent(parent, 2, 3);
-		unionParent(parent, 3, 4);
-		//두 번째 그래프 집합
-		unionParent(parent, 5, 6);
-		unionParent(parent, 7, 6);
-		unionParent(parent, 7, 8); 
-		
-		System.out.println("1과 5는 연결되어 있나요? : "+findParent(parent, 1,5));
-		unionParent(parent, 1, 5);
-		System.out.println("1과 5는 연결되어 있나요? : "+findParent(parent, 1,5));
-	}
-
-	//부모 노드를 찾는 함수
-	static int getParent(int[] parent, int x) {
-		if(parent[x]==x) return x;
-		return parent[x] = getParent(parent, parent[x]);
+		for(int i=0; i<8; i++) list.add(new ArrayList<Integer>());
+		list.get(1).add(2);
+		inDegree[2]++;
+		list.get(1).add(5);
+		inDegree[5]++;
+		list.get(2).add(3);
+		inDegree[3]++;
+		list.get(3).add(4);
+		inDegree[4]++;
+		list.get(4).add(6);
+		inDegree[6]++;
+		list.get(5).add(6);
+		inDegree[6]++;
+		list.get(6).add(7);
+		inDegree[7]++;
+		//사이클 발생
+		//list.get(6).add(3);
+		//inDegree[3]++;
+		topologySort();
 	}
 	
-	//두 부모 노드를 합치는 함수
-	static void unionParent(int[] parent, int a, int b) {
-		a = getParent(parent, a);
-		b = getParent(parent, b);
-		if(a<b) parent[b] = a;
-		else parent[a] = b;
-	}
-	
-	//같은 부모를 가지는지 확인하는 함수
-	static boolean findParent(int parent[], int a, int b) {
-		a = getParent(parent, a);
-		b = getParent(parent, b);
-		if(a==b) return true; //서로 같은 부모, 같은 그래프 
-		return false; //서로 다른 부모, 다른 그래프
+	static void topologySort() {
+		int[] result = new int[8];
+		Queue<Integer> q = new LinkedList<Integer>();
+		//진입 차수가 0인 노드를 큐에 삽입합니다.
+		for(int i=1; i<8; i++) {
+			if(inDegree[i]==0) q.add(i);
+		}
+		//위상 정렬이 완전히 수행되려면 정확히 N개의 노드를 방문합니다.
+		for(int i=0; i<7; i++) {
+			//n개를 방문하기 전에 큐가 빈다면 사이클이 발생한 것 입니다.
+			if(q.isEmpty()) {
+				System.out.println("사이클 발생!");
+				return;
+			} else {
+				int x = q.poll();
+				result[i] = x;
+				for(int j=0; j<list.get(x).size(); j++) {
+					int y = list.get(x).get(j);
+					//새롭게 진입차수가 0이 된 정점을 큐에 삽입합니다.
+					//진입 차수가 0이 되지 않으면 싸이클이 발생한다는 의미이기 때문에 큐에 넣지않아 큐가 비게 될 것입니다.
+ 					if(--inDegree[y]==0) {
+						q.add(y);
+					}
+				}
+			}
+		}
+		for(int i=0; i<n; i++) System.out.print(result[i]+" ");
 	}
 }
 
