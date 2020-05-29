@@ -81,6 +81,7 @@ public class TopologySort {
 				System.out.println("사이클 발생!");
 				return;
 			} else {
+				//큐에서 빼낸 상태로 순서가 결과 값이 됩니다.
 				int x = q.poll();
 				result[i] = x;
 				for(int j=0; j<list.get(x).size(); j++) {
